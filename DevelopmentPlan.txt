@@ -1,0 +1,11 @@
+Development plan for UpTimer Utility.
+
+Functional requirements for UpTimer v.1.0.
+
+1. Application must runinng on system tray.
+2. Application must show system uptime by holding mouse cursor under tray icon.
+
+Functional requirements for UpTimer v.1.1.
+
+1. Application must have options dialog.
+2. User can set up application to start with system.
