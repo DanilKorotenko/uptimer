@@ -11,9 +11,11 @@ TEMPLATE = app
 
 
 SOURCES += .\src\main.cpp\
-	src/uapplication.cpp
+	src/uapplication.cpp \
+    src/usysteminfo.cpp
 
-HEADERS  += src/uapplication.h
+HEADERS  += src/uapplication.h \
+    src/usysteminfo.h
 
 RESOURCES += \
 	res/resources.qrc
