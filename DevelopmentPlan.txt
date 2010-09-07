@@ -4,8 +4,9 @@ Functional requirements for UpTimer v.1.0.
 
 1. Application must runinng on system tray.
 2. Application must show system uptime by holding mouse cursor under tray icon.
+3. Application tray-icon must have a menu with the following items:
+    - "Quit".
 
 Functional requirements for UpTimer v.1.1.
 
-1. Application must have options dialog.
-2. User can set up application to start with system.
+1. Application must have option to start with system. User can change this option.

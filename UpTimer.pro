@@ -11,6 +11,9 @@ TEMPLATE = app
 
 
 SOURCES += .\src\main.cpp\
-        .\src\widget.cpp
+	src/uapplication.cpp
 
-HEADERS  += .\src\widget.h
+HEADERS  += src/uapplication.h
+
+RESOURCES += \
+	res/resources.qrc

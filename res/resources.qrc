@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>Timetracker.ico</file>
+        <file>Clock metal.ico</file>
+        <file>Clock.ico</file>
+        <file>Clock_black.ico</file>
+        <file>Clock_blue.ico</file>
+        <file>Clock_green.ico</file>
+        <file>Clock_inverted.ico</file>
+        <file>Clock_orange.ico</file>
+        <file>Timetracker Ordner.ico</file>
+    </qresource>
+</RCC>
