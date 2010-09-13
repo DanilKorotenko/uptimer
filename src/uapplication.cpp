@@ -1,26 +1,52 @@
 #include "uapplication.h"
 
+#include <QAction>
+#include <QMenu>
+#include <QSystemTrayIcon>
+#include <QTimer>
+
+#include "usysteminfo.h"
+
+#include <qdebug.h>
+
 UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 {
 	this->configureTrayIcon();
+
+	_timer = new QTimer();
+	connect(_timer,SIGNAL(timeout()),this,SLOT(slotTimeout()));
+	_timer->start(1000);
+
+	_systemInfo = new USystemInfo(this);
 }
 
 UApplication::~UApplication()
 {
-	delete quitAction;
-	delete trayMenu;
+	delete _quitAction;
+	delete _trayMenu;
+	delete _trayIcon;
+	delete _timer;
+	delete _systemInfo;
 }
 
 //Private methods
 void UApplication::configureTrayIcon()
 {
-	quitAction = new QAction(tr("&Quit"), this);
-	connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+	_quitAction = new QAction(tr("&Quit"), this);
+	connect(_quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-	trayMenu = new QMenu();
-	trayMenu->addAction(quitAction);
+	_trayMenu = new QMenu();
+	_trayMenu->addAction(_quitAction);
 
-	trayIcon.setIcon(QIcon(":/icons/Clock.ico"));
-	trayIcon.setContextMenu(trayMenu);
-	trayIcon.show();
+	_trayIcon = new QSystemTrayIcon(this);
+	_trayIcon->setIcon(QIcon(":/icons/Clock.ico"));
+	_trayIcon->setContextMenu(_trayMenu);
+	_trayIcon->setToolTip(QString("tool tip"));
+
+	_trayIcon->show();
+}
+
+void UApplication::slotTimeout()
+{
+	_trayIcon->setToolTip(_systemInfo->getSystemUptimeString());
 }

@@ -2,9 +2,13 @@
 #define UAPPLICATION_H
 
 #include <QApplication>
-#include <QSystemTrayIcon>
-#include <QAction>
-#include <QMenu>
+
+class QAction;
+class QMenu;
+class QSystemTrayIcon;
+class QTimer;
+
+class USystemInfo;
 
 class UApplication : public QApplication
 {
@@ -13,20 +17,22 @@ public:
 	UApplication(int argc, char *argv[]);
 	~UApplication();
 
-signals:
-
-public slots:
-
 private:
 //Data
-	QSystemTrayIcon trayIcon;
-	QMenu *trayMenu;
+	QSystemTrayIcon *_trayIcon;
+	QMenu *_trayMenu;
+	QTimer *_timer;
+
+	USystemInfo *_systemInfo;
 
 //Actions
-	QAction *quitAction;
+	QAction *_quitAction;
 
 //Methods
 	void configureTrayIcon();
+
+private slots:
+	void slotTimeout();
 };
 
 #endif // UAPPLICATION_H
