@@ -9,6 +9,8 @@
 
 #include <qdebug.h>
 
+////////////////////////////////////////////////////////////////////////////////
+// Implementation UApplication
 UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 {
 	this->configureTrayIcon();
