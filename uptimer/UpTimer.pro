@@ -9,6 +9,7 @@ QT       += core gui
 TARGET = UpTimer
 TEMPLATE = app
 
+RC_FILE = res.rc
 
 SOURCES += ..\src\main.cpp\
 	..\src\uapplication.cpp \
