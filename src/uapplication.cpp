@@ -4,6 +4,8 @@
 #include <QMenu>
 #include <QSystemTrayIcon>
 #include <QTimer>
+#include <QSettings>
+#include <QDir>
 
 #include "usysteminfo.h"
 
@@ -13,6 +15,9 @@
 // Implementation UApplication
 UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 {
+	this->setApplicationName("UpTimer");
+	this->setOrganizationName("Danil Korotenko");
+
 	this->configureTrayIcon();
 
 	_timer = new QTimer();
@@ -29,6 +34,7 @@ UApplication::~UApplication()
 	delete _trayIcon;
 	delete _timer;
 	delete _systemInfo;
+	delete _optionsMenu;
 }
 
 //Private methods
@@ -39,6 +45,16 @@ void UApplication::configureTrayIcon()
 
 	_trayMenu = new QMenu();
 	_trayMenu->addAction(_quitAction);
+
+	_optionsMenu = new QMenu(tr("Options"));
+	QAction *startWithSystemAction = new QAction(tr("Start with sysem"), this);
+	startWithSystemAction->setCheckable(true);
+
+	connect(startWithSystemAction,SIGNAL(toggled(bool)),this,
+		SLOT(slotToggleStartWithSystem(bool)));
+	_optionsMenu->addAction(startWithSystemAction);
+
+	_trayMenu->addMenu(_optionsMenu);
 
 	_trayIcon = new QSystemTrayIcon(this);
 	_trayIcon->setIcon(QIcon(":/icons/Clock.ico"));
@@ -51,4 +67,23 @@ void UApplication::configureTrayIcon()
 void UApplication::slotTimeout()
 {
 	_trayIcon->setToolTip(_systemInfo->getSystemUptimeString());
+}
+
+void UApplication::slotToggleStartWithSystem(bool togled)
+{
+	#ifdef Q_WS_WIN
+		QSettings regSettings(
+			"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+			QSettings::NativeFormat);
+
+		if (togled)
+		{
+			regSettings.setValue(this->applicationName(),
+				QDir::toNativeSeparators(this->applicationFilePath()));
+		}
+		else
+		{
+			regSettings.remove(this->applicationName());
+		}
+	#endif
 }

@@ -21,6 +21,7 @@ private:
 //Data
 	QSystemTrayIcon *_trayIcon;
 	QMenu *_trayMenu;
+	QMenu *_optionsMenu;
 	QTimer *_timer;
 
 	USystemInfo *_systemInfo;
@@ -33,6 +34,7 @@ private:
 
 private slots:
 	void slotTimeout();
+	void slotToggleStartWithSystem(bool togled);
 };
 
 #endif // UAPPLICATION_H
