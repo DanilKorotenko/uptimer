@@ -10,12 +10,11 @@ TARGET = UpTimer
 TEMPLATE = app
 
 
-SOURCES += .\src\main.cpp\
-	src/uapplication.cpp \
-    src/usysteminfo.cpp
+SOURCES += ./src/main.cpp \
+        ./src/uapplication.cpp \
+    ./src/usysteminfo.cpp
 
-HEADERS  += src/uapplication.h \
-    src/usysteminfo.h
+HEADERS  += ./src/uapplication.h \
+    ./src/usysteminfo.h
 
-RESOURCES += \
-	res/resources.qrc
+RESOURCES += ./res/resources.qrc
