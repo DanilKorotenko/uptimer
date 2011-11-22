@@ -9,12 +9,14 @@ class USettingsManager : public QObject
 public:
 	static USettingsManager *sharedManager();
 
+	bool isRunsAtStart();
+	void setRunAtStart(bool flag);
+
 protected:
 	USettingsManager(QObject *parent = 0);
 
 private:
 	static USettingsManager *_sharedManager;
-
 };
 
 #endif // USETTINGSMANAGER_H

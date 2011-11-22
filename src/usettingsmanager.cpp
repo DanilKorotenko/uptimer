@@ -1,5 +1,8 @@
 #include "usettingsmanager.h"
 
+#include <QtCore>
+#include <QtGui>
+
 ////////////////////////////////////////////////////////////////////////////////
 // Constants
 USettingsManager *USettingsManager::_sharedManager = NULL;
@@ -12,11 +15,49 @@ USettingsManager *USettingsManager::sharedManager()
 	if (_sharedManager == NULL)
 	{
 		_sharedManager = new USettingsManager;
-//		_sharedManager->loadSettings();
 	}
 	return _sharedManager;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Settings getters and setters
+bool USettingsManager::isRunsAtStart()
+{
+	bool result = false;
+
+	#ifdef Q_WS_WIN
+		QSettings regSettings(
+			"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+			QSettings::NativeFormat);
+
+		result = regSettings.contains(qApp->applicationName());
+
+	#endif
+
+	return result;
+}
+
+void USettingsManager::setRunAtStart(bool flag)
+{
+	#ifdef Q_WS_WIN
+		QSettings regSettings(
+			"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+			QSettings::NativeFormat);
+
+		if (flag)
+		{
+			regSettings.setValue(qApp->applicationName(),
+				QDir::toNativeSeparators(qApp->applicationFilePath()));
+		}
+		else
+		{
+			regSettings.remove(qApp->applicationName());
+		}
+	#endif
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Private methods
 USettingsManager::USettingsManager(QObject *parent) : QObject(parent)
 {
 }

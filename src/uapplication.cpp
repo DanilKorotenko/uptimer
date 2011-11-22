@@ -8,6 +8,7 @@
 #include <QDir>
 
 #include "usysteminfo.h"
+#include "usettingsmanager.h"
 
 #include <qdebug.h>
 
@@ -49,7 +50,8 @@ void UApplication::configureTrayIcon()
 	_optionsMenu = new QMenu(tr("Options"));
 	QAction *startWithSystemAction = new QAction(tr("Start with sysem"), this);
 	startWithSystemAction->setCheckable(true);
-
+	startWithSystemAction->setChecked(
+		USettingsManager::sharedManager()->isRunsAtStart());
 	connect(startWithSystemAction,SIGNAL(toggled(bool)),this,
 		SLOT(slotToggleStartWithSystem(bool)));
 	_optionsMenu->addAction(startWithSystemAction);
@@ -71,19 +73,5 @@ void UApplication::slotTimeout()
 
 void UApplication::slotToggleStartWithSystem(bool togled)
 {
-	#ifdef Q_WS_WIN
-		QSettings regSettings(
-			"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
-			QSettings::NativeFormat);
-
-		if (togled)
-		{
-			regSettings.setValue(this->applicationName(),
-				QDir::toNativeSeparators(this->applicationFilePath()));
-		}
-		else
-		{
-			regSettings.remove(this->applicationName());
-		}
-	#endif
+	USettingsManager::sharedManager()->setRunAtStart(togled);
 }
