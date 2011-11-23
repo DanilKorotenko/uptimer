@@ -9,6 +9,7 @@
 
 #include "usysteminfo.h"
 #include "usettingsmanager.h"
+#include "uoptionsdialog.h"
 
 #include <qdebug.h>
 
@@ -16,6 +17,8 @@
 // Implementation UApplication
 UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 {
+	this->setQuitOnLastWindowClosed(false);
+
 	this->setApplicationName("UpTimer");
 	this->setOrganizationName("Danil Korotenko");
 
@@ -30,33 +33,18 @@ UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 
 UApplication::~UApplication()
 {
-	delete _quitAction;
 	delete _trayMenu;
 	delete _trayIcon;
 	delete _timer;
 	delete _systemInfo;
-	delete _optionsMenu;
 }
 
 //Private methods
 void UApplication::configureTrayIcon()
 {
-	_quitAction = new QAction(tr("&Quit"), this);
-	connect(_quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-
 	_trayMenu = new QMenu();
-	_trayMenu->addAction(_quitAction);
-
-	_optionsMenu = new QMenu(tr("Options"));
-	QAction *startWithSystemAction = new QAction(tr("Start with sysem"), this);
-	startWithSystemAction->setCheckable(true);
-	startWithSystemAction->setChecked(
-		USettingsManager::sharedManager()->isRunsAtStart());
-	connect(startWithSystemAction,SIGNAL(toggled(bool)),this,
-		SLOT(slotToggleStartWithSystem(bool)));
-	_optionsMenu->addAction(startWithSystemAction);
-
-	_trayMenu->addMenu(_optionsMenu);
+	_trayMenu->addAction(tr("&Quit"),qApp,SLOT(quit()));
+	_trayMenu->addAction(tr("Options..."),this,SLOT(slotShowOptionsDialog()));
 
 	_trayIcon = new QSystemTrayIcon(this);
 	_trayIcon->setIcon(QIcon(":/icons/Clock.ico"));
@@ -71,7 +59,8 @@ void UApplication::slotTimeout()
 	_trayIcon->setToolTip(_systemInfo->getSystemUptimeString());
 }
 
-void UApplication::slotToggleStartWithSystem(bool togled)
+void UApplication::slotShowOptionsDialog()
 {
-	USettingsManager::sharedManager()->setRunAtStart(togled);
+	UOptionsDialog dialog;
+	dialog.exec();
 }

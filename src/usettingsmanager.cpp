@@ -14,7 +14,7 @@ USettingsManager *USettingsManager::sharedManager()
 {
 	if (_sharedManager == NULL)
 	{
-		_sharedManager = new USettingsManager;
+		_sharedManager = new USettingsManager();
 	}
 	return _sharedManager;
 }
