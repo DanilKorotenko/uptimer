@@ -19,7 +19,18 @@ USettingsManager *USettingsManager::sharedManager()
 	return _sharedManager;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+// Public Methods
+void USettingsManager::saveSettingsFromData(USettingsData data)
+{
+	this->setRunAtStart(data.runAtStart);
+
+	QSettings destSettings(qApp->organizationName(), qApp->applicationName(),
+		this);
+	destSettings.setValue(QString("showRegularMessage"),
+		data.showRegularMessage);
+
+}
+
 // Settings getters and setters
 bool USettingsManager::isRunsAtStart()
 {
@@ -29,9 +40,7 @@ bool USettingsManager::isRunsAtStart()
 		QSettings regSettings(
 			"HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
 			QSettings::NativeFormat);
-
 		result = regSettings.contains(qApp->applicationName());
-
 	#endif
 
 	return result;

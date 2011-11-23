@@ -3,6 +3,8 @@
 
 #include <QtGui>
 
+#include "usettingsmanager.h"
+
 class UOptionsDialog : public QDialog
 {
 	Q_OBJECT
@@ -13,8 +15,15 @@ public slots:
 	void accept();
 
 private slots:
-	void slotRunAtStartChecked(int state);
+	void slotRunAtStartChecked(bool state);
+	void slotShowRegularMessageChecked(bool state);
 
+private: //Methods
+	QGroupBox *createRunAtStartBox();
+	QGroupBox *createMessagesBox();
+
+private: //Data
+	USettingsData _settingsData;
 };
 
 #endif // UOPTIONSDIALOG_H
