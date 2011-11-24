@@ -1,11 +1,12 @@
 #include "usettingsmanager.h"
 
-#include <QtCore>
-#include <QtGui>
-
 ////////////////////////////////////////////////////////////////////////////////
 // Constants
 USettingsManager *USettingsManager::_sharedManager = NULL;
+
+static QString const kShowRegularMessageKey = "ShowRegularMessageKey";
+static QString const kRegularMessageTextKey = "RegularMessageTextKey";
+static QString const kRegularMessageTimeKey = "RegularMessageTimeKey";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -24,10 +25,9 @@ void USettingsManager::saveSettingsFromData(USettingsData data)
 {
 	this->setRunAtStart(data.runAtStart);
 
-	QSettings destSettings(qApp->organizationName(), qApp->applicationName(),
-		this);
-	destSettings.setValue(QString("showRegularMessage"),
-		data.showRegularMessage);
+	settings->setValue(kShowRegularMessageKey, data.showRegularMessage);
+	settings->setValue(kRegularMessageTextKey, data.regularMessageText);
+	settings->setValue(kRegularMessageTimeKey, data.regularMessageTime);
 
 }
 
@@ -65,8 +65,25 @@ void USettingsManager::setRunAtStart(bool flag)
 	#endif
 }
 
+bool USettingsManager::showRegularMessage()
+{
+	return settings->value(kShowRegularMessageKey, QVariant(false)).toBool();
+}
+
+QString USettingsManager::regularMessageText()
+{
+	return settings->value(kRegularMessageTextKey, tr("Time is gone")).toString();
+}
+
+QTime USettingsManager::regularMessageTime()
+{
+	return settings->value(kRegularMessageTimeKey, QTime()).toTime();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Private methods
 USettingsManager::USettingsManager(QObject *parent) : QObject(parent)
 {
+	settings = new QSettings(qApp->organizationName(), qApp->applicationName(),
+		this);
 }

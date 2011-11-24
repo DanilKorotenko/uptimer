@@ -14,16 +14,15 @@ public:
 public slots:
 	void accept();
 
-private slots:
-	void slotRunAtStartChecked(bool state);
-	void slotShowRegularMessageChecked(bool state);
-
 private: //Methods
 	QGroupBox *createRunAtStartBox();
 	QGroupBox *createMessagesBox();
 
-private: //Data
-	USettingsData _settingsData;
+private:
+	QCheckBox *_runAtStartCheckbox;
+	QCheckBox *_showRegularMessageCheckbox;
+	QLineEdit *_regularMessageText;
+	QTimeEdit *_regularMessageTime;
 };
 
 #endif // UOPTIONSDIALOG_H

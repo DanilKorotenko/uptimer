@@ -27,6 +27,7 @@ private:
 
 //Methods
 	void configureTrayIcon();
+	void acceptSettings();
 
 private slots:
 	void slotTimeout();

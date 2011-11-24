@@ -23,20 +23,15 @@ UOptionsDialog::UOptionsDialog(QDialog *parent) : QDialog(parent)
 void UOptionsDialog::accept()
 {
 	// save settings
-	USettingsManager::sharedManager()->saveSettingsFromData(_settingsData);
+	USettingsData settingsData;
+	settingsData.runAtStart = _runAtStartCheckbox->isChecked();
+	settingsData.showRegularMessage = _showRegularMessageCheckbox->isChecked();
+	settingsData.regularMessageText = _regularMessageText->text();
+	settingsData.regularMessageTime = _regularMessageTime->time();
+
+	USettingsManager::sharedManager()->saveSettingsFromData(settingsData);
 
 	QDialog::accept();
-}
-
-// Private Slots
-void UOptionsDialog::slotRunAtStartChecked(bool state)
-{
-	_settingsData.runAtStart = state;
-}
-
-void UOptionsDialog::slotShowRegularMessageChecked(bool state)
-{
-	_settingsData.showRegularMessage = state;
 }
 
 //Private methods
@@ -44,13 +39,11 @@ QGroupBox *UOptionsDialog::createRunAtStartBox()
 {
 	QGroupBox *runAtStartBox = new QGroupBox(tr("Run At Start"), this);
 	QVBoxLayout *runAtStartBoxLayout = new QVBoxLayout(runAtStartBox);
-	QCheckBox *runAtStartCheckbox = new QCheckBox(tr("Run At System Start"),
+	_runAtStartCheckbox = new QCheckBox(tr("Run At System Start"),
 		runAtStartBox);
-	runAtStartCheckbox->setChecked(
+	_runAtStartCheckbox->setChecked(
 		USettingsManager::sharedManager()->isRunsAtStart());
-	connect(runAtStartCheckbox, SIGNAL(toggled(bool)), this,
-		SLOT(slotRunAtStartChecked(bool)));
-	runAtStartBoxLayout->addWidget(runAtStartCheckbox);
+	runAtStartBoxLayout->addWidget(_runAtStartCheckbox);
 	runAtStartBox->setLayout(runAtStartBoxLayout);
 
 	return runAtStartBox;
@@ -62,14 +55,28 @@ QGroupBox *UOptionsDialog::createMessagesBox()
 	QVBoxLayout *topBoxLayout = new QVBoxLayout(messagesBox);
 
 	QHBoxLayout *regularMessageGroup = new QHBoxLayout(messagesBox);
-	QCheckBox *showRegularMessageCheckbox =
-		new QCheckBox(tr("Show this message:"), messagesBox);
-	connect(showRegularMessageCheckbox,SIGNAL(toggled(bool)), this,
-		SLOT(slotShowRegularMessageChecked(bool)));
-	regularMessageGroup->addWidget(showRegularMessageCheckbox);
+
+	_showRegularMessageCheckbox = new QCheckBox(tr("Show this message:"),
+		messagesBox);
+	_showRegularMessageCheckbox->setChecked(
+		USettingsManager::sharedManager()->showRegularMessage());
+	regularMessageGroup->addWidget(_showRegularMessageCheckbox);
+
+	_regularMessageText = new QLineEdit(messagesBox);
+	_regularMessageText->setText(
+		USettingsManager::sharedManager()->regularMessageText());
+	regularMessageGroup->addWidget(_regularMessageText);
+
+	regularMessageGroup->addWidget(new QLabel(tr("every:"), this));
+
+	_regularMessageTime = new QTimeEdit(this);
+	_regularMessageTime->setTime(
+		USettingsManager::sharedManager()->regularMessageTime());
+	regularMessageGroup->addWidget(_regularMessageTime);
 
 	topBoxLayout->addLayout(regularMessageGroup);
 
 	messagesBox->setLayout(topBoxLayout);
 	return messagesBox;
 }
+

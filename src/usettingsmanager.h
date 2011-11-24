@@ -1,7 +1,7 @@
 #ifndef USETTINGSMANAGER_H
 #define USETTINGSMANAGER_H
 
-#include <QObject>
+#include <QtCore>
 
 ////////////////////////////////////////////////////////////////////////////////
 struct USettingsData
@@ -9,6 +9,7 @@ struct USettingsData
 	bool runAtStart;
 	bool showRegularMessage;
 	QString regularMessageText;
+	QTime regularMessageTime;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,6 +22,10 @@ public:
 	bool isRunsAtStart();
 	void setRunAtStart(bool flag);
 
+	bool showRegularMessage();
+	QString regularMessageText();
+	QTime regularMessageTime();
+
 	void saveSettingsFromData(USettingsData data);
 
 protected:
@@ -28,6 +33,7 @@ protected:
 
 private:
 	static USettingsManager *_sharedManager;
+	QSettings *settings;
 };
 
 #endif // USETTINGSMANAGER_H

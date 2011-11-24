@@ -54,6 +54,12 @@ void UApplication::configureTrayIcon()
 	_trayIcon->show();
 }
 
+void UApplication::acceptSettings()
+{
+
+}
+
+// Private slots
 void UApplication::slotTimeout()
 {
 	_trayIcon->setToolTip(_systemInfo->getSystemUptimeString());
@@ -62,5 +68,8 @@ void UApplication::slotTimeout()
 void UApplication::slotShowOptionsDialog()
 {
 	UOptionsDialog dialog;
-	dialog.exec();
+	if (QDialog::Accepted == dialog.exec())
+	{
+		this->acceptSettings();
+	}
 }
