@@ -15,14 +15,18 @@ SOURCES += ../src/main.cpp \
         ../src/uapplication.cpp \
         ../src/usysteminfo.cpp \
     ../src/usettingsmanager.cpp \
-    ../src/uoptionsdialog.cpp
+    ../src/uoptionsdialog.cpp \
+    ../src/umessagewidget.cpp
 
 HEADERS  += ../src/uapplication.h \
     ../src/usysteminfo.h \
     ../src/usettingsmanager.h \
-    ../src/uoptionsdialog.h
+    ../src/uoptionsdialog.h \
+    ../src/umessagewidget.h
 
 RESOURCES += ../res/resources.qrc
+
+
 
 
 

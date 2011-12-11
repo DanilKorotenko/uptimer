@@ -20,9 +20,9 @@ private: //Methods
 
 private:
 	QCheckBox *_runAtStartCheckbox;
-	QCheckBox *_showRegularMessageCheckbox;
-	QLineEdit *_regularMessageText;
-	QTimeEdit *_regularMessageTime;
+//	QCheckBox *_showRegularMessageCheckbox;
+//	QLineEdit *_regularMessageText;
+//	QTimeEdit *_regularMessageTime;
 };
 
 #endif // UOPTIONSDIALOG_H

@@ -4,9 +4,11 @@
 // Constants
 USettingsManager *USettingsManager::_sharedManager = NULL;
 
-static QString const kShowRegularMessageKey = "ShowRegularMessageKey";
-static QString const kRegularMessageTextKey = "RegularMessageTextKey";
-static QString const kRegularMessageTimeKey = "RegularMessageTimeKey";
+static QString const kMessagesKey = "MessagesKey";
+static QString const kMessageEnableKey = "MessageEnableKey";
+static QString const kMessageRegularKey = "MessageRegularKey";
+static QString const kMessageTimeKey = "MessageTimeKey";
+static QString const kMessageTextKey = "MessageTextKey";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -25,10 +27,16 @@ void USettingsManager::saveSettingsFromData(USettingsData data)
 {
 	this->setRunAtStart(data.runAtStart);
 
-	settings->setValue(kShowRegularMessageKey, data.showRegularMessage);
-	settings->setValue(kRegularMessageTextKey, data.regularMessageText);
-	settings->setValue(kRegularMessageTimeKey, data.regularMessageTime);
-
+	_settings->beginWriteArray(kMessagesKey);
+	for (int i = 0; i < data.messages.size(); ++i)
+	{
+		_settings->setArrayIndex(i);
+		_settings->setValue(kMessageEnableKey, data.messages.at(i).enable);
+		_settings->setValue(kMessageRegularKey, data.messages.at(i).regular);
+		_settings->setValue(kMessageTimeKey, data.messages.at(i).time);
+		_settings->setValue(kMessageTextKey, data.messages.at(i).text);
+	}
+	_settings->endArray();
 }
 
 // Settings getters and setters
@@ -65,25 +73,27 @@ void USettingsManager::setRunAtStart(bool flag)
 	#endif
 }
 
-bool USettingsManager::showRegularMessage()
+QList<UMessageEntry> USettingsManager::messages()
 {
-	return settings->value(kShowRegularMessageKey, QVariant(false)).toBool();
-}
+	QList<UMessageEntry> result;
 
-QString USettingsManager::regularMessageText()
-{
-	return settings->value(kRegularMessageTextKey, tr("Time is gone")).toString();
-}
+	int size = _settings->beginReadArray("logins");
+	for (int i = 0; i < size; ++i)
+	{
+		_settings->setArrayIndex(i);
+		UMessageEntry messageEntry;
+		messageEntry.enable = _settings->value(kMessageEnableKey).toBool();
+		result.append(messageEntry);
+	}
+	_settings->endArray();
 
-QTime USettingsManager::regularMessageTime()
-{
-	return settings->value(kRegularMessageTimeKey, QTime()).toTime();
+	return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Private methods
 USettingsManager::USettingsManager(QObject *parent) : QObject(parent)
 {
-	settings = new QSettings(qApp->organizationName(), qApp->applicationName(),
+	_settings = new QSettings(qApp->organizationName(), qApp->applicationName(),
 		this);
 }

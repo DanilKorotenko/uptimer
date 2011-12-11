@@ -29,6 +29,8 @@ UApplication::UApplication(int argc, char *argv[]) : QApplication(argc, argv)
 	_timer->start(1000);
 
 	_systemInfo = new USystemInfo(this);
+
+	this->acceptSettings();
 }
 
 UApplication::~UApplication()

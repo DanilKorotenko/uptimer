@@ -4,12 +4,18 @@
 #include <QtCore>
 
 ////////////////////////////////////////////////////////////////////////////////
+struct UMessageEntry
+{
+	bool enable;
+	bool regular;
+	QTime time;
+	QString text;
+};
+
 struct USettingsData
 {
 	bool runAtStart;
-	bool showRegularMessage;
-	QString regularMessageText;
-	QTime regularMessageTime;
+	QList<UMessageEntry> messages;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -22,9 +28,7 @@ public:
 	bool isRunsAtStart();
 	void setRunAtStart(bool flag);
 
-	bool showRegularMessage();
-	QString regularMessageText();
-	QTime regularMessageTime();
+	QList<UMessageEntry> messages();
 
 	void saveSettingsFromData(USettingsData data);
 
@@ -33,7 +37,7 @@ protected:
 
 private:
 	static USettingsManager *_sharedManager;
-	QSettings *settings;
+	QSettings *_settings;
 };
 
 #endif // USETTINGSMANAGER_H

@@ -1,4 +1,5 @@
 #include "uoptionsdialog.h"
+#include "umessagewidget.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation UOptionsDialog
@@ -25,9 +26,9 @@ void UOptionsDialog::accept()
 	// save settings
 	USettingsData settingsData;
 	settingsData.runAtStart = _runAtStartCheckbox->isChecked();
-	settingsData.showRegularMessage = _showRegularMessageCheckbox->isChecked();
-	settingsData.regularMessageText = _regularMessageText->text();
-	settingsData.regularMessageTime = _regularMessageTime->time();
+//	settingsData.showRegularMessage = _showRegularMessageCheckbox->isChecked();
+//	settingsData.regularMessageText = _regularMessageText->text();
+//	settingsData.regularMessageTime = _regularMessageTime->time();
 
 	USettingsManager::sharedManager()->saveSettingsFromData(settingsData);
 
@@ -54,27 +55,34 @@ QGroupBox *UOptionsDialog::createMessagesBox()
 	QGroupBox *messagesBox = new QGroupBox(tr("Messages"), this);
 	QVBoxLayout *topBoxLayout = new QVBoxLayout(messagesBox);
 
-	QHBoxLayout *regularMessageGroup = new QHBoxLayout(messagesBox);
+	QListWidget *listWidget = new QListWidget(messagesBox);
 
-	_showRegularMessageCheckbox = new QCheckBox(tr("Show this message:"),
-		messagesBox);
-	_showRegularMessageCheckbox->setChecked(
-		USettingsManager::sharedManager()->showRegularMessage());
-	regularMessageGroup->addWidget(_showRegularMessageCheckbox);
+	QListWidgetItem *item = new QListWidgetItem(listWidget);
 
-	_regularMessageText = new QLineEdit(messagesBox);
-	_regularMessageText->setText(
-		USettingsManager::sharedManager()->regularMessageText());
-	regularMessageGroup->addWidget(_regularMessageText);
+	listWidget->addItem(item);
+	listWidget->setItemWidget(item, new UMessageWidget(listWidget));
+	topBoxLayout->addWidget(listWidget);
+//	QHBoxLayout *regularMessageGroup = new QHBoxLayout(messagesBox);
 
-	regularMessageGroup->addWidget(new QLabel(tr("every:"), this));
+//	_showRegularMessageCheckbox = new QCheckBox(tr("Show this message:"),
+//		messagesBox);
+//	_showRegularMessageCheckbox->setChecked(
+//		USettingsManager::sharedManager()->showRegularMessage());
+//	regularMessageGroup->addWidget(_showRegularMessageCheckbox);
 
-	_regularMessageTime = new QTimeEdit(this);
-	_regularMessageTime->setTime(
-		USettingsManager::sharedManager()->regularMessageTime());
-	regularMessageGroup->addWidget(_regularMessageTime);
+//	_regularMessageText = new QLineEdit(messagesBox);
+//	_regularMessageText->setText(
+//		USettingsManager::sharedManager()->regularMessageText());
+//	regularMessageGroup->addWidget(_regularMessageText);
 
-	topBoxLayout->addLayout(regularMessageGroup);
+//	regularMessageGroup->addWidget(new QLabel(tr("every:"), this));
+
+//	_regularMessageTime = new QTimeEdit(this);
+//	_regularMessageTime->setTime(
+//		USettingsManager::sharedManager()->regularMessageTime());
+//	regularMessageGroup->addWidget(_regularMessageTime);
+
+//	topBoxLayout->addLayout(regularMessageGroup);
 
 	messagesBox->setLayout(topBoxLayout);
 	return messagesBox;
